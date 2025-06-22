@@ -1,0 +1,179 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "video-draft-creator"
+version = "0.1.0"
+description = "强大的视频音频下载、转录和AI纠错工具"
+authors = [
+    {name = "Video Draft Creator Team", email = "video-draft-creator@example.com"}
+]
+maintainers = [
+    {name = "Video Draft Creator Team", email = "video-draft-creator@example.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+]
+keywords = [
+    "video", "audio", "transcription", "whisper", "deepseek",
+    "download", "yt-dlp", "speech-to-text", "ai", "nlp"
+]
+dependencies = [
+    "yt-dlp>=2024.7.25",
+    "faster-whisper>=1.0.0",
+    "requests>=2.32.3",
+    "Click>=8.1.7",
+    "python-docx>=1.1.2",
+    "markdown>=3.6",
+    "PyYAML>=6.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.4",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "pytest-asyncio>=0.23.2",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
+]
+docs = [
+    "sphinx>=7.1.2",
+    "sphinx-rtd-theme>=1.3.0",
+    "sphinx-autodoc-typehints>=1.24.0",
+    "myst-parser>=2.0.0",
+    "sphinx-autobuild>=2021.3.14",
+]
+test = [
+    "pytest>=7.4.4",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "pytest-asyncio>=0.23.2",
+]
+gpu = [
+    "torch>=2.0.0",
+    "torchaudio>=2.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/video-draft-creator"
+Documentation = "https://video-draft-creator.readthedocs.io/"
+Repository = "https://github.com/yourusername/video-draft-creator"
+"Bug Reports" = "https://github.com/yourusername/video-draft-creator/issues"
+Changelog = "https://github.com/yourusername/video-draft-creator/blob/main/CHANGELOG.md"
+
+[project.scripts]
+video-draft-creator = "video_draft_creator.cli:main"
+vdc = "video_draft_creator.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+video_draft_creator = ["templates/*", "config/*"]
+
+# Black 代码格式化配置
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+# isort 导入排序配置
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["video_draft_creator"]
+
+# MyPy 类型检查配置
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "yt_dlp.*",
+    "faster_whisper.*",
+    "docx.*",
+]
+ignore_missing_imports = true
+
+# Pytest 配置
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = [
+    "tests",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "api: marks tests that require API access",
+]
+
+# Coverage 配置
+[tool.coverage.run]
+source = ["src"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ __ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+] 

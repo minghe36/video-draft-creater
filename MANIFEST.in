@@ -1,0 +1,39 @@
+# 包含在分发包中的文件
+
+# 文档文件
+include README.md
+include LICENSE
+include CHANGELOG.md
+include requirements.txt
+
+# 配置文件
+recursive-include config *.yaml *.yml
+recursive-include src/video_draft_creator/templates *
+recursive-include src/video_draft_creator/config *
+
+# 排除不需要的文件
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * *.so
+recursive-exclude * .DS_Store
+recursive-exclude * .git*
+recursive-exclude * *.egg-info
+
+# 排除测试和开发文件
+exclude .gitignore
+exclude .pre-commit-config.yaml
+exclude pytest.ini
+exclude tox.ini
+exclude .coverage
+exclude Makefile
+
+# 排除开发目录
+recursive-exclude tests *
+recursive-exclude docs *
+recursive-exclude examples *
+recursive-exclude scripts *
+recursive-exclude .git *
+recursive-exclude .pytest_cache *
+recursive-exclude .coverage *
+recursive-exclude .mypy_cache *
+recursive-exclude .tox * 
