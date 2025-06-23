@@ -143,3 +143,5 @@ output/
 *.srt
 *.vtt
 config/config.yaml
+.pypirc
+*.pypirc

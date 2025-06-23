@@ -322,6 +322,7 @@ class AudioDownloader:
         
         def single_download_with_progress(url_index_tuple):
             """单个下载任务的包装函数"""
+            nonlocal completed_count, successful_count
             url, index = url_index_tuple
             
             def item_progress_callback(d):
@@ -353,7 +354,6 @@ class AudioDownloader:
                 
                 # 更新计数器
                 with self._progress_lock:
-                    nonlocal completed_count, successful_count
                     completed_count += 1
                     if result.success:
                         successful_count += 1
@@ -364,7 +364,6 @@ class AudioDownloader:
             except Exception as e:
                 # 处理异常情况
                 with self._progress_lock:
-                    nonlocal completed_count, successful_count
                     completed_count += 1
                     self.logger.error(f"下载任务异常: {url} - {e}")
                 

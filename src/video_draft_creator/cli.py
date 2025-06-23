@@ -154,19 +154,19 @@ def cmd_process(args):
         progress.start_operation("下载音频")
         progress_callback = get_progress_callback("download")
         
-        success, message, file_path = downloader.download_audio(
+        result = downloader.download_audio(
             args.url, 
             args.output_name,
             progress_callback
         )
         
-        if success:
-            StatusDisplay.success("音频下载完成", f"文件位置: {file_path}")
+        if result.success:
+            StatusDisplay.success("音频下载完成", f"文件位置: {result.file_path}")
             progress.complete_operation()
             
             # 转录处理
             if args.transcribe:
-                transcribe_success = perform_transcription(file_path, config, args)
+                transcribe_success = perform_transcription(result.file_path, config, args)
                 if not transcribe_success:
                     StatusDisplay.error("转录处理失败")
                     return False
@@ -174,15 +174,15 @@ def cmd_process(args):
             return True
         else:
             error_suggestions = []
-            if "cookie" in message.lower() or "验证" in message.lower():
+            if "cookie" in result.message.lower() or "验证" in result.message.lower():
                 error_suggestions = [
                     "使用浏览器cookie: --cookie-browser chrome",
                     "使用cookie文件: --cookie-file cookies.txt",
                     "检查配置文件中的cookie设置"
                 ]
             
-            StatusDisplay.error("下载失败", message, error_suggestions)
-            progress.fail_operation(message, error_suggestions)
+            StatusDisplay.error("下载失败", result.message, error_suggestions)
+            progress.fail_operation(result.message, error_suggestions)
             return False
             
     except Exception as e:
@@ -692,7 +692,7 @@ def cmd_config(args):
             
             print(f"\n🔄 转录配置:")
             transcription = config_dict.get('transcription', {})
-            print(f"  模型大小: {transcription.get('model_size', 'medium')}")
+            print(f"  模型大小: {transcription.get('model_size', 'base')}")
             print(f"  语言: {transcription.get('language', 'auto')}")
             
             print(f"\n🤖 AI配置:")
@@ -739,7 +739,7 @@ def cmd_config(args):
                 }
             },
             'transcription': {
-                'model_size': 'medium',
+                'model_size': 'base',
                 'language': 'auto',
                 'temperature': 0.0,
                 'beam_size': 5
@@ -1375,7 +1375,7 @@ def create_parser():
   %(prog)s batch urls.txt --cookie-browser firefox
 
   # 转录音频文件
-  %(prog)s transcribe audio.mp3 --model-size medium --language zh
+  %(prog)s transcribe audio.mp3 --model-size base --language zh
 
   # 查看配置
   %(prog)s config --show
@@ -1483,7 +1483,7 @@ def create_parser():
     parser_transcribe.add_argument('--output-dir', '-o',
                                  help='输出目录')
     parser_transcribe.add_argument('--model-size', '-m',
-                                 choices=['tiny', 'base', 'small', 'medium', 'large', 'large-v2', 'large-v3'],
+                                 choices=['tiny', 'base', 'small', 'base', 'large', 'large-v2', 'large-v3'],
                                  help='转录模型大小')
     parser_transcribe.add_argument('--language', '-l',
                                  help='音频语言 (如: zh, en, auto)')

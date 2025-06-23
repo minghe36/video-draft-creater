@@ -44,7 +44,7 @@ AudioTranscriber 类
 
    # 创建转录器
    transcriber = create_transcriber(
-       model_size="medium",
+       model_size="base",
        language="zh"
    )
    

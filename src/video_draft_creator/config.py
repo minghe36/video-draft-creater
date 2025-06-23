@@ -57,7 +57,7 @@ class DownloadConfig:
 @dataclass
 class TranscriptionConfig:
     """转录配置"""
-    model_size: str = "medium"
+    model_size: str = "base"
     language: str = "auto"
     temperature: float = 0.0
     beam_size: int = 5
